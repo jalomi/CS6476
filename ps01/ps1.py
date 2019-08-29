@@ -250,6 +250,7 @@ def difference_image(img1, img2):
 
     image1_tmp = np.copy(img1)
     image2_tmp = np.copy(img2)
+    result = np.copy(img1) * 0.0 #default as all 0s
 
     image1_tmp = image1_tmp.astype(float)
     image2_tmp = image2_tmp.astype(float)
