@@ -10,6 +10,8 @@ import cv2
 
 import ps2
 
+import numpy as np
+
 
 def draw_tl_center(image_in, center, state):
     """Marks the center of a traffic light image and adds coordinates
@@ -38,7 +40,35 @@ def draw_tl_center(image_in, center, state):
         traffic light center and text that presents the numerical
         coordinates with the traffic light state.
     """
-    raise NotImplementedError
+
+    image = np.copy(image_in)
+
+    cv2.circle(image, center, 7, (200,20,200), -1)
+
+    # shift the center a bit to beter place text box
+    center = (center[0] + 10, center[1] - 2)
+
+    font = cv2.FONT_HERSHEY_SIMPLEX
+    font_size = 1.5
+    thickness = 2
+
+    label_size, baseline = cv2.getTextSize(state, font, font_size, thickness)
+
+    inflate = 2 #amount to inflate rectangle by
+
+    cv2.rectangle(image,
+                  (center[0] - inflate, center[1] + inflate),
+                  (center[0] + label_size[0] + inflate, center[1] - label_size[1] - inflate),
+                  (0,0,0), -1)
+
+    cv2.line(image,
+             (center[0], center[1] + thickness),
+             (center[0] + label_size[0], center[1] + thickness),
+             (200,20,200), 2)
+
+    cv2.putText(image, state, center, font, font_size, (255,255,255), thickness)
+
+    return image
 
 
 def mark_traffic_signs(image_in, signs_dict):
@@ -160,8 +190,8 @@ def part_5b():
 
 if __name__ == '__main__':
     part_1()
-    part_2()
-    part_3()
-    part_4()
-    part_5a()
-    part_5b()
+    #part_2()
+    #part_3()
+    #part_4()
+    #part_5a()
+    #part_5b()

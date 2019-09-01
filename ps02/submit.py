@@ -42,7 +42,7 @@ def main():
                      "img-5-a-1.png", "img-5-a-2.png", "img-5-a-3.png",
                      "img-5-b-1.png", "img-5-b-2.png", "img-5-b-3.png"]
 
-    require_pledges()
+    #require_pledges()
 
     submit(course, quiz, filenames)
 

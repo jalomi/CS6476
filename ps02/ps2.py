@@ -35,7 +35,49 @@ def traffic_light_detection(img_in, radii_range):
         state (str): traffic light state. A value in {'red', 'yellow',
                      'green'}
     """
-    raise NotImplementedError
+
+    image = np.copy(img_in)
+
+    center = (0,0)
+    red = False
+    yellow = False
+    green = False
+    state = ""
+
+    image_gray = img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    circles = cv2.HoughCircles(image_gray, cv2.HOUGH_GRADIENT, 2.0 , 20,
+                               param1=50, param2=20, minRadius=radii_range[0], maxRadius=radii_range[-1])
+
+    if circles is not None:
+        circles = np.round(circles[0, :]).astype(int)
+
+        total_y = 0
+        total_x = 0
+
+        for c in circles:
+            cv2.circle(image, (c[0], c[1]), c[2], (200, 20, 200), 2)
+
+            total_x += c[0]
+            total_y += c[1]
+
+            if (image[c[1]][c[0]][1] >= 200):
+                if (image[c[1]][c[0]][2] <= 50):
+                    green = True
+                elif (image[c[1]][c[0]][2] >= 200):
+                    yellow = True
+            elif (image[c[1]][c[0]][2] >= 200):
+                red = True
+
+        center = (int(total_x/3), int(total_y/3))
+
+    if green:
+        state = 'green'
+    elif yellow:
+        state = 'yellow'
+    elif red:
+        state = 'red'
+
+    return (center, state)
 
 
 def yield_sign_detection(img_in):
